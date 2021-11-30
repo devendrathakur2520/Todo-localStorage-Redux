@@ -14,6 +14,11 @@ import {
     updatingTodoIndex: null,
     
   }
+
+  const getLocalStorage=(records=[])=>{
+    const data=JSON.stringify(records);
+    localStorage.setItem('records',data)
+  }
   
   export default function todos (state = initialState, action) {
     switch (action.type) {
@@ -28,12 +33,15 @@ import {
           updatingTodoIndex: action.payload,
           todo: { ...state.records[action.payload] },
         };
-      case ADD_TODO:
+      case ADD_TODO:{
+        const records= [...state.records, action.payload]
+        getLocalStorage(records);
         return {
           ...state,
-          records: [...state.records, action.payload],
+         // records: [...state.records, action.payload]
+          records,
           todo: initialState.todo,
-        };
+        };}
       case UPDATE_TODO:
         const records = [...state.records];
         records[state.updatingTodoIndex] = action.payload;
